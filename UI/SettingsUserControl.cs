@@ -191,6 +191,8 @@ namespace LiveSplit.BugFables.UI
 
         new Split { group = "Chapter 4", name = "Enter Bandit Hideout",
                     requiredRoom = GameEnums.Room.HideoutEntrance },
+        new Split { group = "Chapter 4", name = "Broodmother",
+                    requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.Broodmother } },
         new Split { group = "Chapter 4", name = "Astotheles",
                     requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.Astotheles } },
         new Split { group = "Chapter 4", name = "Dune Scorpion",
@@ -227,6 +229,8 @@ namespace LiveSplit.BugFables.UI
         new Split { group = "Chapter 7", name = "Deadlanders Trio",
                     requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.DeadLanderAlpha, 
                                                                       GameEnums.Enemy.DeadLanderBeta, GameEnums.Enemy.DeadLanderGamma } },
+        new Split { group = "Chapter 7", name = "Enter Fridge",
+                    requiredRoom = GameEnums.Room.GiantLairFridgeInside },
         new Split { group = "Chapter 7", name = "Exit Fridge",
                     requiredRoom = GameEnums.Room.GiantLairRoachVillage },
         new Split { group = "Chapter 7", name = "Final Boss Room",

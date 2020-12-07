@@ -22,6 +22,7 @@ namespace LiveSplit.BugFables.GameEnums
     SwamplandsBoss = 154,
     TermiteColiseum2 = 179,
     RubberPrisonGiantLairBridge = 231,
+    GiantLairFridgeInside = 236,  
     GiantLairRoachVillage = 237,
     GiantLairSaplingPlains = 238,
     BugariaEndThrone = 242
@@ -41,6 +42,7 @@ namespace LiveSplit.BugFables.GameEnums
     WaspDriller = 27,
     WaspScout = 28,
     MonsieurScarlet = 31,
+    Broodmother = 36,
     Burglar = 39,
     Astotheles = 40,
     Ahoneynation = 42,
