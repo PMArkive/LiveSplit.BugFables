@@ -33,9 +33,9 @@ namespace LiveSplit.BugFables.UI
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.rdbGlitchless = new System.Windows.Forms.RadioButton();
       this.grpSplits = new System.Windows.Forms.GroupBox();
-      this.flowSplits = new System.Windows.Forms.FlowLayoutPanel();
-      this.btnSetCurrentSplits = new System.Windows.Forms.Button();
       this.lblVersion = new System.Windows.Forms.Label();
+      this.btnSetCurrentSplits = new System.Windows.Forms.Button();
+      this.flowSplits = new System.Windows.Forms.FlowLayoutPanel();
       this.groupBox1.SuspendLayout();
       this.grpSplits.SuspendLayout();
       this.SuspendLayout();
@@ -68,10 +68,10 @@ namespace LiveSplit.BugFables.UI
       this.rdbGlitchless.AutoSize = true;
       this.rdbGlitchless.Location = new System.Drawing.Point(175, 25);
       this.rdbGlitchless.Name = "rdbGlitchless";
-      this.rdbGlitchless.Size = new System.Drawing.Size(103, 24);
+      this.rdbGlitchless.Size = new System.Drawing.Size(122, 24);
       this.rdbGlitchless.TabIndex = 1;
       this.rdbGlitchless.TabStop = true;
-      this.rdbGlitchless.Text = "Glitchless";
+      this.rdbGlitchless.Text = "Select Splits";
       this.rdbGlitchless.UseVisualStyleBackColor = true;
       this.rdbGlitchless.CheckedChanged += new System.EventHandler(this.rdbGlitchless_CheckedChanged);
       // 
@@ -87,16 +87,14 @@ namespace LiveSplit.BugFables.UI
       this.grpSplits.TabStop = false;
       this.grpSplits.Text = "Splits";
       // 
-      // flowSplits
+      // lblVersion
       // 
-      this.flowSplits.AutoScroll = true;
-      this.flowSplits.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-      this.flowSplits.Location = new System.Drawing.Point(6, 34);
-      this.flowSplits.MinimumSize = new System.Drawing.Size(0, 600);
-      this.flowSplits.Name = "flowSplits";
-      this.flowSplits.Size = new System.Drawing.Size(682, 600);
-      this.flowSplits.TabIndex = 0;
-      this.flowSplits.WrapContents = false;
+      this.lblVersion.AutoSize = true;
+      this.lblVersion.Location = new System.Drawing.Point(2, 649);
+      this.lblVersion.Name = "lblVersion";
+      this.lblVersion.Size = new System.Drawing.Size(108, 20);
+      this.lblVersion.TabIndex = 3;
+      this.lblVersion.Text = "Version X.X.X";
       // 
       // btnSetCurrentSplits
       // 
@@ -108,14 +106,16 @@ namespace LiveSplit.BugFables.UI
       this.btnSetCurrentSplits.UseVisualStyleBackColor = true;
       this.btnSetCurrentSplits.Click += new System.EventHandler(this.btnSetCurrentSplits_Click);
       // 
-      // lblVersion
+      // flowSplits
       // 
-      this.lblVersion.AutoSize = true;
-      this.lblVersion.Location = new System.Drawing.Point(2, 649);
-      this.lblVersion.Name = "lblVersion";
-      this.lblVersion.Size = new System.Drawing.Size(108, 20);
-      this.lblVersion.TabIndex = 3;
-      this.lblVersion.Text = "Version X.X.X";
+      this.flowSplits.AutoScroll = true;
+      this.flowSplits.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+      this.flowSplits.Location = new System.Drawing.Point(6, 34);
+      this.flowSplits.MinimumSize = new System.Drawing.Size(0, 600);
+      this.flowSplits.Name = "flowSplits";
+      this.flowSplits.Size = new System.Drawing.Size(682, 600);
+      this.flowSplits.TabIndex = 0;
+      this.flowSplits.WrapContents = false;
       // 
       // SettingsUserControl
       // 
