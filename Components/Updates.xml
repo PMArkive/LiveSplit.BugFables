@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <updates>
+  <update version="1.2.3">
+    <files>
+      <file path="Components/LiveSplit.BugFables.dll" status="changed" />
+    </files>
+    <changelog>
+      <change>Added support for two any% sepecifc splits: broodmother and enter fridge.</change>
+      <change>Changed the label in the settings from the "Glitchless" mode to the "Select Splits" mode. This mode allows to select splits from EITHER glitchless OR any%, please update your splits settings accordingly when running either category.</change>
+    </changelog>
+  </update>
   <update version="1.2.2">
     <files>
       <file path="Components/LiveSplit.BugFables.dll" status="changed" />
