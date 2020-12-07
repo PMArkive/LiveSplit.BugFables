@@ -7,7 +7,7 @@ This autosplitter supports the following features:
 
 * Auto start when starting a new file; this works regardless of starting the file from the MYSTERY? set seed prompt or the filename prompt.
 * Auto reset; only done in conjunction with auto start if the timer was already started
-* Auto split with the option to disable or enable any splits from a given category. Currently, this feature is only supported for the glitchless category. It is possible to automatically generate splits based on your autosplitter selections.
+* Auto split with the option to disable or enable any splits from a given category. Currently, this feature is only supported for the glitchless and any% category. It is possible to automatically generate splits based on your autosplitter selections.
 * Automatically split when the screen is fully faded to white before the credits marking the end of the run.
 
 ## Installation instructions
@@ -23,7 +23,7 @@ This autosplitter component is currently live in the LiveSplit's autosplitter ca
 This autosplitter can operate in 2 modes:
 
 * Start and end only: Only check for the start and end of the run.
-* Glitchless: Enables splits for the glitchless category. Also allow you to set the current splits to the autosplitter selection.
+* Select Splits: Enables splits used in the glitchless or any% category. Also allow you to set the current splits to the autosplitter selection.
 
  CAUTION: Using "Set Current Splits" will clear your current splits including their name and time. You may need to remove the splits and readd them in the layout for the new splits to appear.
 
