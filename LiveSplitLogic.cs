@@ -1,5 +1,6 @@
 ﻿using LiveSplit.BugFables.UI;
 using System;
+using System.IO;
 
 namespace LiveSplit.BugFables
 {
@@ -20,6 +21,7 @@ namespace LiveSplit.BugFables
 
     private bool oldListeningToTitleSong = false;
     private byte[] oldEnemyEncounter = null;
+    private string pathLogFile = "";
 
     private Split[] splits;
     private SettingsUserControl settings;
@@ -28,7 +30,25 @@ namespace LiveSplit.BugFables
     {
       this.gameMemory = gameMemory;
       this.settings = settings;
+      this.pathLogFile = Directory.GetCurrentDirectory() + @"\Components\LiveSplit.BugFables-log.txt";
       InitSplits();
+      LogToFile("STARTED");
+    }
+
+    private void LogToFile(string message)
+    {
+      if (!File.Exists(pathLogFile))
+      {
+        var fs = File.Create(pathLogFile);
+        fs.Close();
+      }
+
+      string currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+      using (StreamWriter file = new StreamWriter(pathLogFile, append: true))
+      {
+        file.WriteLine("[" + currentTimeStamp + "] " + message);
+      }
     }
 
     private void InitSplits()
@@ -44,12 +64,21 @@ namespace LiveSplit.BugFables
       try
       {
         if (!gameMemory.ReadFirstMusicId(out currentSong))
+        {
+          if (oldListeningToTitleSong)
+            LogToFile("ShouldStart: Couldn't read the first music id");
+
           return false;
+        }
         if (!gameMemory.ReadFlags(out flags))
+        {
+          LogToFile("ShouldStart: Couldn't read the flags");
           return false;
+        }
       }
-      catch (Exception)
+      catch (Exception ex)
       {
+        LogToFile("ShouldStart: Unhandled exception while reading memory: " + ex.Message);
         return false;
       }
 
@@ -57,7 +86,15 @@ namespace LiveSplit.BugFables
       bool newListeningToTitleSong = (currentSong == (int)GameEnums.Song.Title);
       if (oldListeningToTitleSong && !newListeningToTitleSong)
       {
+        LogToFile("ShouldStart: No longer listening to the title screen song");
         shouldStart = BitConverter.ToBoolean(flags, (int)GameEnums.Flag.NewGameStarted);
+        LogToFile("ShouldStart: NewGameStarted is " + shouldStart);
+      }
+
+      if (oldListeningToTitleSong != newListeningToTitleSong)
+      {
+        LogToFile("ShouldStart: Listening to title song, was " + oldListeningToTitleSong +
+                  " and is now " + newListeningToTitleSong);
       }
 
       oldListeningToTitleSong = newListeningToTitleSong;
@@ -188,21 +225,34 @@ namespace LiveSplit.BugFables
       try
       {
         if (!gameMemory.ReadFirstMusicId(out currentSong))
+        {
+          LogToFile("ShouldEnd: Couldn't read the first music id");
           return false;
+        }
         if (!gameMemory.ReadMusicCoroutineInProgress(out musicCoroutine))
+        {
+          LogToFile("ShouldEnd: Couldn't read the music coroutine");
           return false;
+        }
         if (!gameMemory.ReadCurrentRoomId(out currentRoomId))
+        {
+          LogToFile("ShouldEnd: Couldn't read the current room id");
           return false;
+        }
       }
-      catch (Exception)
+      catch (Exception ex)
       {
+        LogToFile("ShouldEnd: Unhandled exception while reading memory: " + ex.Message);
         return false;
       }
 
       if (currentEndTimeState == EndTimeState.NotArrivedYet)
       {
         if (currentRoomId == (int)GameEnums.Room.BugariaEndThrone)
+        {
           currentEndTimeState = EndTimeState.ArrivedInRoom;
+          LogToFile("ShouldEnd: Just arrived in the room");
+        }
       }
       else
       {
@@ -211,18 +261,22 @@ namespace LiveSplit.BugFables
         if (currentEndTimeState == EndTimeState.ArrivedInRoom && currentSong == (int)GameEnums.Song.LevelUp)
         {
           currentEndTimeState = EndTimeState.SongLevelUpStarting;
+          LogToFile("ShouldEnd: The level up song is starting");
         }
         else if (currentEndTimeState == EndTimeState.SongLevelUpStarting && !newMusicCouroutineInProgress)
         {
           currentEndTimeState = EndTimeState.SongLevelIsPlaying;
+          LogToFile("ShouldEnd: The level up song is playing");
         }
         else if (currentEndTimeState == EndTimeState.SongLevelIsPlaying && newMusicCouroutineInProgress)
         {
           currentEndTimeState = EndTimeState.SongIsFading;
+          LogToFile("ShouldEnd: The level up song is fading");
         }
         else if (currentEndTimeState == EndTimeState.SongIsFading && !newMusicCouroutineInProgress)
         {
           currentEndTimeState = EndTimeState.NotArrivedYet;
+          LogToFile("ShouldEnd: The level up song is done fading");
           return true;
         }
       }
@@ -237,6 +291,7 @@ namespace LiveSplit.BugFables
       currentEndTimeState = EndTimeState.NotArrivedYet;
 
       InitSplits();
+      LogToFile("LOGIC RESET");
     }
   }
 }
