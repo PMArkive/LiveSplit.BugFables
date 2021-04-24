@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LiveSplit.BugFables.GameEnums
+﻿namespace LiveSplit.BugFables.GameEnums
 {
   public enum Room
   {
@@ -22,7 +20,7 @@ namespace LiveSplit.BugFables.GameEnums
     SwamplandsBoss = 154,
     TermiteColiseum2 = 179,
     RubberPrisonGiantLairBridge = 231,
-    GiantLairFridgeInside = 236,  
+    GiantLairFridgeInside = 236,
     GiantLairRoachVillage = 237,
     GiantLairSaplingPlains = 238,
     BugariaEndThrone = 242

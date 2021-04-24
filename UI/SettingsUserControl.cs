@@ -1,5 +1,5 @@
-﻿using LiveSplit.UI;
-using LiveSplit.Model;
+﻿using LiveSplit.Model;
+using LiveSplit.UI;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -155,11 +155,11 @@ namespace LiveSplit.BugFables.UI
                     requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.AcolyteAria } },
         new Split { group = "Chapter 2", name = "Golden Hills after Big Crank",
                     requiredRoom = GameEnums.Room.GoldenHillsDungeonEntrance,
-                    requiredFlags = new GameEnums.Flag[] { GameEnums.Flag.GotBigCrankTopHalf, 
+                    requiredFlags = new GameEnums.Flag[] { GameEnums.Flag.GotBigCrankTopHalf,
                                                            GameEnums.Flag.GotBigCrankBottomHalf } },
         new Split { group = "Chapter 2", name = "Zasp & Mothiva",
                     requiredRoom = GameEnums.Room.GoldenHillsDungeonEntrance,
-                    requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.Zasp, 
+                    requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.Zasp,
                                                                       GameEnums.Enemy.Mothiva } },
         new Split { group = "Chapter 2", name = "Enter Venus's Garden",
                     requiredRoom = GameEnums.Room.GoldenHillsDungeonBoss },
@@ -170,8 +170,8 @@ namespace LiveSplit.BugFables.UI
                     requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.MonsieurScarlet } },
         new Split { group = "Chapter 3", name = "Merchants Rescue",
                     requiredRoom = GameEnums.Room.DesertCaravanMap,
-                    requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.Burglar, 
-                                                                      GameEnums.Enemy.Thief, 
+                    requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.Burglar,
+                                                                      GameEnums.Enemy.Thief,
                                                                       GameEnums.Enemy.WaspScout } },
         new Split { group = "Chapter 3", name = "Enter Honey Factory",
                     requiredRoom = GameEnums.Room.HoneyFactoryEntrance },
@@ -209,8 +209,8 @@ namespace LiveSplit.BugFables.UI
         new Split { group = "Chapter 5", name = "The Beast",
                     requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.TheBeast } },
         new Split { group = "Chapter 5", name = "General Ultimax",
-                    requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.WaspDriller, 
-                                                                      GameEnums.Enemy.WaspBomber, 
+                    requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.WaspDriller,
+                                                                      GameEnums.Enemy.WaspBomber,
                                                                       GameEnums.Enemy.GeneralUltimax } },
 
         new Split { group = "Chapter 6", name = "Enter Forsaken Lands",
@@ -219,7 +219,7 @@ namespace LiveSplit.BugFables.UI
                     requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.PrimalWeevil } },
         new Split { group = "Chapter 6", name = "Zasp & Mothiva 2",
                     requiredRoom = GameEnums.Room.TermiteColiseum2,
-                    requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.Zasp, 
+                    requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.Zasp,
                                                                       GameEnums.Enemy.Mothiva } },
         new Split { group = "Chapter 6", name = "Rubber Prison Giant's Lair Bridge",
                     requiredRoom = GameEnums.Room.RubberPrisonGiantLairBridge },
@@ -227,7 +227,7 @@ namespace LiveSplit.BugFables.UI
                     requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.ULTIMAXTank } },
 
         new Split { group = "Chapter 7", name = "Deadlanders Trio",
-                    requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.DeadLanderAlpha, 
+                    requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.DeadLanderAlpha,
                                                                       GameEnums.Enemy.DeadLanderBeta, GameEnums.Enemy.DeadLanderGamma } },
         new Split { group = "Chapter 7", name = "Enter Fridge",
                     requiredRoom = GameEnums.Room.GiantLairFridgeInside },

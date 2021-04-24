@@ -1,10 +1,10 @@
-﻿using LiveSplit.Model;
+﻿using LiveSplit.BugFables.UI;
+using LiveSplit.Model;
 using LiveSplit.UI;
 using LiveSplit.UI.Components;
-using LiveSplit.BugFables.UI;
-using System.Xml;
-using System.Windows.Forms;
 using System;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace LiveSplit.BugFables
 {
@@ -76,7 +76,6 @@ namespace LiveSplit.BugFables
 
       if (logic.ShouldStart())
       {
-        logic.ResetLogic();
         if (liveSplitState.CurrentPhase == TimerPhase.Running)
           timerModel.Reset();
         timerModel.Start();
