@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <updates>
+  <update version="1.2.4">
+    <files>
+      <file path="Components/LiveSplit.BugFables.dll" status="changed" />
+    </files>
+    <changelog>
+      <change>Added logs for the start and end split logic, the log file will be located in the LiveSplit's Components folder.</change>
+    </changelog>
+  </update>
   <update version="1.2.3">
     <files>
       <file path="Components/LiveSplit.BugFables.dll" status="changed" />
