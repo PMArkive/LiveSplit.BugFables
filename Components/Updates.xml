@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <updates>
+  <update version="1.2.6">
+    <files>
+      <file path="Components/LiveSplit.BugFables.dll" status="changed" />
+    </files>
+    <changelog>
+      <change>Added an Enter Snakemouth split</change>
+      <change>Added an Enter Bandit Hideout Storage Room split</change>
+      <change>Added an Enter Rubber Prison split</change>
+      <change>Added an Enter Fridge Outside split</change>
+    </changelog>
+  </update>
   <update version="1.2.5">
     <files>
       <file path="Components/LiveSplit.BugFables.dll" status="changed" />
