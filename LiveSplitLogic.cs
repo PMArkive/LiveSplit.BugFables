@@ -148,9 +148,15 @@ namespace LiveSplit.BugFables
       Split split = splits[currentSplitIndex];
 
       if (!MidSplitRoomCheck(split, currentRoomId))
+      {
+        enemyEncounter.CopyTo(oldEnemyEncounter, 0);
         return false;
+      }
       if (!MidSplitFlagsCheck(split, flags))
+      {
+        enemyEncounter.CopyTo(oldEnemyEncounter, 0);
         return false;
+      }
       if (!MidSplitEnemyDefeatedCheck(split, enemyEncounter, battlePtr))
         return false;
 
