@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <updates>
+  <update version="1.2.5">
+    <files>
+      <file path="Components/LiveSplit.BugFables.dll" status="changed" />
+    </files>
+    <changelog>
+      <change>Fixed all splits requiring enemies by properly updated the old enemy encounter information (this fixes the Gen &amp; Eri split triggering too early) </change>
+    </changelog>
+  </update>
   <update version="1.2.4">
     <files>
       <file path="Components/LiveSplit.BugFables.dll" status="changed" />
