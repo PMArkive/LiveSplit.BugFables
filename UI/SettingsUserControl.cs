@@ -142,6 +142,8 @@ namespace LiveSplit.BugFables.UI
     {
       glitchlessAllSplits = new Split[]
       {
+        new Split { group = "Chapter 1", name = "Enter Snakemouth",
+                    requiredRoom = GameEnums.Room.SnakemouthBridgeRoom },
         new Split { group = "Chapter 1", name = "Leif Rescue",
                     requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.Web } },
         new Split { group = "Chapter 1", name = "Enter Treasure Room",
@@ -191,6 +193,8 @@ namespace LiveSplit.BugFables.UI
 
         new Split { group = "Chapter 4", name = "Enter Bandit Hideout",
                     requiredRoom = GameEnums.Room.HideoutEntrance },
+        new Split { group = "Chapter 4", name = "Enter Bandit Hideout Storage Room",
+                    requiredRoom = GameEnums.Room.HideoutWestStorage },
         new Split { group = "Chapter 4", name = "Broodmother",
                     requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.Broodmother } },
         new Split { group = "Chapter 4", name = "Astotheles",
@@ -221,11 +225,15 @@ namespace LiveSplit.BugFables.UI
                     requiredRoom = GameEnums.Room.TermiteColiseum2,
                     requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.Zasp,
                                                                       GameEnums.Enemy.Mothiva } },
+        new Split { group = "Chapter 6", name = "Enter Rubber Prison",
+                    requiredRoom = GameEnums.Room.RubberPrisonPier },
         new Split { group = "Chapter 6", name = "Rubber Prison Giant's Lair Bridge",
                     requiredRoom = GameEnums.Room.RubberPrisonGiantLairBridge },
         new Split { group = "Chapter 6", name = "ULTIMAX Tank",
                     requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.ULTIMAXTank } },
 
+        new Split { group = "Chapter 7", name = "Enter Fridge Outside",
+                    requiredRoom = GameEnums.Room.GiantLairFridgeOutside },
         new Split { group = "Chapter 7", name = "Deadlanders Trio",
                     requiredEnemiesDefeated = new GameEnums.Enemy[] { GameEnums.Enemy.DeadLanderAlpha,
                                                                       GameEnums.Enemy.DeadLanderBeta, GameEnums.Enemy.DeadLanderGamma } },
