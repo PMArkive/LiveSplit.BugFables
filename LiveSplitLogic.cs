@@ -292,7 +292,6 @@ namespace LiveSplit.BugFables
 
     public void ResetLogic()
     {
-      oldListeningToTitleSong = false;
       oldEnemyEncounter = null;
       currentEndTimeState = EndTimeState.NotArrivedYet;
 
