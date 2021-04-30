@@ -21,8 +21,8 @@ namespace LiveSplit.BugFables
     private BfVersion currentBfVersion = BfVersion.UNASSIGNED;
 
     // Version specific information
-    const int baseAddrMainManagerStaticPath110 = 0x014EC558;
-    readonly List<int> offsetPathPrefixMainManagerStatic110 = new List<int> { 0x58, 0x98, 0x0, 0x18 };
+    const int baseAddrMainManagerStaticPath110 = 0x014E46C8;
+    readonly List<int> offsetPathPrefixMainManagerStatic110 = new List<int> { 0x28, 0x10, 0xA0, 0xBB8 };
     const int numFlags110 = 750;
 
     // Version agnostics essentials
