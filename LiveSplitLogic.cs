@@ -19,7 +19,9 @@ namespace LiveSplit.BugFables
 
     private GameMemory gameMemory = new GameMemory();
 
-    private bool oldListeningToTitleSong = false;
+    // Defaults to true so that the ShouldStart logic won't trigger if LiveSplit
+    // is opened whtn a file is loaded
+    private bool oldNewGameStarted = true;
     private byte[] oldEnemyEncounter = null;
     private string pathLogFile = "";
 
@@ -58,18 +60,10 @@ namespace LiveSplit.BugFables
 
     public bool ShouldStart()
     {
-      int currentSong;
       byte[] flags;
 
       try
       {
-        if (!gameMemory.ReadFirstMusicId(out currentSong))
-        {
-          if (oldListeningToTitleSong)
-            LogToFile("ShouldStart: Couldn't read the first music id");
-
-          return false;
-        }
         if (!gameMemory.ReadFlags(out flags))
         {
           LogToFile("ShouldStart: Couldn't read the flags");
@@ -81,23 +75,13 @@ namespace LiveSplit.BugFables
         LogToFile("ShouldStart: Unhandled exception while reading memory: " + ex.Message);
         return false;
       }
+      bool newNewGameStarted = BitConverter.ToBoolean(flags, (int)GameEnums.Flag.NewGameStarted);
+      bool shouldStart = (newNewGameStarted && !oldNewGameStarted);
 
-      bool shouldStart = false;
-      bool newListeningToTitleSong = (currentSong == (int)GameEnums.Song.Title);
-      if (oldListeningToTitleSong && !newListeningToTitleSong)
-      {
-        LogToFile("ShouldStart: No longer listening to the title screen song");
-        shouldStart = BitConverter.ToBoolean(flags, (int)GameEnums.Flag.NewGameStarted);
-        LogToFile("ShouldStart: NewGameStarted is " + shouldStart);
-      }
+      if (newNewGameStarted != oldNewGameStarted)
+        LogToFile("ShouldStart: NewGameStarted was " + oldNewGameStarted + " and now " + newNewGameStarted);
 
-      if (oldListeningToTitleSong != newListeningToTitleSong)
-      {
-        LogToFile("ShouldStart: Listening to title song, was " + oldListeningToTitleSong +
-                  " and is now " + newListeningToTitleSong);
-      }
-
-      oldListeningToTitleSong = newListeningToTitleSong;
+      oldNewGameStarted = newNewGameStarted;
       return shouldStart;
     }
 
