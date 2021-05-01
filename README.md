@@ -29,6 +29,8 @@ This autosplitter can operate in 2 modes:
 
 The splits's name are designed to work best using the "Subsplits" layout as opposed to the "Splits" layout since they are grouped per chapter.
 
+NOTE: This autosplitter will not work with a modified mono.dll (for use with DnSpy) or when the BepInEx mod loader is installed.
+
 ## Additional resources
 If you have any questions or issues to report, you can do so in the [Bug Fables speedrunning discord server](https://discord.gg/tHAQWpF).
 
