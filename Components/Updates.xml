@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <updates>
+  <update version="1.2.9">
+    <files>
+      <file path="Components/LiveSplit.BugFables.dll" status="changed" />
+    </files>
+    <changelog>
+      <change>Changed the MainManager pointer path to be more reliable...AGAIN</change>
+    </changelog>
+  </update>
   <update version="1.2.8">
     <files>
       <file path="Components/LiveSplit.BugFables.dll" status="changed" />
