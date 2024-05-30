@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -9,21 +10,28 @@ namespace LiveSplit.BugFables
 {
   public class GameMemory
   {
-    private const string moduleName = "mono.dll";
+    private string moduleName = "";
     private const string ProcessName = "Bug Fables";
 
     private enum BfVersion
     {
       UNASSIGNED,
-      v110
+      v110,
+      v113MonoBleedingEdge
     }
 
     private BfVersion currentBfVersion = BfVersion.UNASSIGNED;
 
     // Version specific information
+    private const string moduleNameOldMono = "mono.dll";
+    private const string moduleNameNewMono = "mono-2.0-bdwgc.dll";
+    
     const int baseAddrMainManagerStaticPath110 = 0x00501AC8;
     readonly List<int> offsetPathPrefixMainManagerStatic110 = new List<int> { 0x20, 0x150 };
-    const int numFlags110 = 750;
+    private const int numFlags110 = 750;
+    
+    const int baseAddrMainManagerStaticPath113MonoBleedingEdge = 0x0048FA90;
+    readonly List<int> offsetPathPrefixMainManagerStatic113MonoBleedingEdge = new List<int> { 0xBD0, 0x0, 0x60 };
 
     // Version agnostics essentials
     private int baseAddrMainManagerPath = 0;
@@ -60,8 +68,11 @@ namespace LiveSplit.BugFables
     private DeepPointer DPMainManagerBattlePtr = null;
     private DeepPointer DPMainManagerEnemyEncounter = null;
 
+    private string pathLogFile = "";
+    
     public GameMemory()
     {
+      this.pathLogFile = Directory.GetCurrentDirectory() + @"\Components\LiveSplit.BugFables-log.txt";
       ProcessHook();
     }
 
@@ -79,7 +90,7 @@ namespace LiveSplit.BugFables
       // New hook
       if (BfGameProcess == null && proc != null)
       {
-        currentBfVersion = DetermineCurrentGameVersion();
+        currentBfVersion = DetermineCurrentGameVersion(proc);
         InitVersionSpecificVariables();
         InitDeepPointers();
         BfGameProcess = proc;
@@ -216,8 +227,15 @@ namespace LiveSplit.BugFables
       switch (currentBfVersion)
       {
         case BfVersion.v110:
+          moduleName = moduleNameOldMono;
           baseAddrMainManagerPath = baseAddrMainManagerStaticPath110;
           offsetPathPrefixMainManagerStatic.AddRange(offsetPathPrefixMainManagerStatic110);
+          numFlags = numFlags110;
+          break;
+        case BfVersion.v113MonoBleedingEdge:
+          moduleName = moduleNameNewMono;
+          baseAddrMainManagerPath = baseAddrMainManagerStaticPath113MonoBleedingEdge;
+          offsetPathPrefixMainManagerStatic.AddRange(offsetPathPrefixMainManagerStatic113MonoBleedingEdge);
           numFlags = numFlags110;
           break;
         case BfVersion.UNASSIGNED:
@@ -243,9 +261,41 @@ namespace LiveSplit.BugFables
       numFlags = -1;
     }
 
-    private BfVersion DetermineCurrentGameVersion()
+    private BfVersion DetermineCurrentGameVersion(Process proc)
     {
-      return BfVersion.v110;
+      foreach (ProcessModule procModule in proc.Modules)
+      {
+        if (procModule.ModuleName == moduleNameNewMono)
+        {
+          LogToFile("Detected MonoBleedingEdge");
+          return BfVersion.v113MonoBleedingEdge;
+        }
+
+        if (procModule.ModuleName == moduleNameOldMono)
+        {
+          LogToFile("Detected Mono");
+          return BfVersion.v110;
+        }
+      }
+      
+      LogToFile("Couldn't find the runtime module, assuming MonoBleedingEdge");
+      return BfVersion.v113MonoBleedingEdge;
+    }
+    
+    private void LogToFile(string message)
+    {
+      if (!File.Exists(pathLogFile))
+      {
+        var fs = File.Create(pathLogFile);
+        fs.Close();
+      }
+
+      string currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+      using (StreamWriter file = new StreamWriter(pathLogFile, append: true))
+      {
+        file.WriteLine("[" + currentTimeStamp + "] " + message);
+      }
     }
   }
 }
