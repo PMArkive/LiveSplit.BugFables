@@ -28,8 +28,8 @@ namespace LiveSplit.BugFables
     readonly List<int> offsetPathPrefixMainManagerStatic110 = new List<int> { 0x20, 0x150 };
     private const int numFlags110 = 750;
     
-    const int baseAddrMainManagerStaticPath113MonoBleedingEdge = 0x0048FA90;
-    readonly List<int> offsetPathPrefixMainManagerStatic113MonoBleedingEdge = new List<int> { 0xBD0, 0x0, 0x60 };
+    const int baseAddrMainManagerStaticPath113MonoBleedingEdge = 0x00493C70;
+    readonly List<int> offsetPathPrefixMainManagerStatic113MonoBleedingEdge = [0x98, 0x10, 0x4A8, 0x18, 0x8, 0x60];
 
     // Version agnostics essentials
     private int baseAddrMainManagerPath = 0;
@@ -252,6 +252,7 @@ namespace LiveSplit.BugFables
     private void ResetEverything()
     {
       BfGameProcess = null;
+      moduleName = "";
       currentBfVersion = BfVersion.UNASSIGNED;
       baseAddrMainManagerPath = 0;
       offsetPathPrefixMainManagerStatic.Clear();
