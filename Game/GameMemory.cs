@@ -48,9 +48,16 @@ namespace LiveSplit.BugFables
 
     // MainManger offsets
     const int offsetMainMangerMusicIdArray = 0x160;
+    const int offsetMainManagerLastEvent = 0x3b0;
+
+    // MainManger instance offsets
     const int offsetMainManagerFlagsArray = 0x160;
     const int offsetMainManagerMusicCoroutine = 0x58;
     const int offsetMainManagerEnemyEncounter = 0x190;
+    const int offsetMainManagerInEvent = 0x25e;
+    
+    // MapControl instance offsets
+    const int offsetMapControlMapId = 0x108;
 
     // Unity specific offsets
     const int offsetUnityCachedPtr = 0x10;
@@ -65,9 +72,9 @@ namespace LiveSplit.BugFables
     private DeepPointer DPMainManagerBattle = null;
     private DeepPointer DPMainManagerBattlePtr = null;
     private DeepPointer DPMainManagerEnemyEncounter = null;
+    private DeepPointer DPMainManagerLastEvent = null;
+    private DeepPointer DPMainManagerInEvent = null;
 
-    private string pathLogFile = "";
-    
     public GameMemory()
     {
       ProcessHook();
@@ -180,10 +187,23 @@ namespace LiveSplit.BugFables
       return false;
     }
 
+    public bool ReadInEvent(out bool inEvent)
+    {
+      return DPMainManagerInEvent.Deref(BfGameProcess, out inEvent);
+    }
+    
+    public bool ReadLastEvent(out int inEvent)
+    {
+      return DPMainManagerLastEvent.Deref(BfGameProcess, out inEvent);
+    }
+
     private void InitDeepPointers()
     {
-      DPMainManagerMusicCoroutine = new DeepPointer(moduleName, baseAddrMainManagerPath,
-        GetFullOffsetPathFromParts(new List<int> { offsetMainManagerMusicCoroutine }));
+      DPMainManagerMusicCoroutine = new(moduleName, baseAddrMainManagerPath,
+        GetFullOffsetPathFromParts([offsetMainManagerMusicCoroutine]));
+
+      DPMainManagerCurrentRoomName = new(moduleName, baseAddrMainManagerPath,
+        GetFullOffsetPathFromParts([offsetMainManagerMap, offsetMapControlMapId]));
 
       DPMainManagerCurrentRoomName = new DeepPointer(moduleName, baseAddrMainManagerPath,
         GetFullOffsetPathFromParts(new List<int> { offsetMainManagerMap }, offsetPathUnityGameObjectName));
@@ -198,24 +218,21 @@ namespace LiveSplit.BugFables
       DPMainManagerBattlePtr = new DeepPointer(moduleName, baseAddrMainManagerPath,
       GetFullOffsetPathFromParts(new List<int> { offsetMainManagerBattle, offsetUnityCachedPtr }));
 
-      DPMainManagerBattle = new DeepPointer(moduleName, baseAddrMainManagerPath,
-      GetFullOffsetPathFromParts(new List<int> { offsetMainManagerBattle }));
-
-      DPMainManagerEnemyEncounter = new DeepPointer(moduleName, baseAddrMainManagerPath,
-      GetFullOffsetPathFromParts(new List<int> { offsetMainManagerInstance, offsetMainManagerEnemyEncounter, offsetArrayFirstElement }));
+      DPMainManagerEnemyEncounter = new(moduleName, baseAddrMainManagerPath,
+      GetFullOffsetPathFromParts([offsetMainManagerInstance, offsetMainManagerEnemyEncounter, offsetArrayFirstElement]));
+      
+      DPMainManagerInEvent = new(moduleName, baseAddrMainManagerPath,
+        GetFullOffsetPathFromParts([offsetMainManagerInstance, offsetMainManagerInEvent]));
+      
+      DPMainManagerLastEvent = new(moduleName, baseAddrMainManagerPath,
+        GetFullOffsetPathFromParts([offsetMainManagerLastEvent]));
     }
 
-    private int[] GetFullOffsetPathFromParts(List<int> mainParts, List<int> unitySuffixPath = null, int unityArrayOffset = -1)
+    private int[] GetFullOffsetPathFromParts(List<int> mainParts)
     {
       List<int> pathList = new List<int>();
       pathList.AddRange(offsetPathPrefixMainManagerStatic);
       pathList.AddRange(mainParts);
-      if (unitySuffixPath != null)
-      {
-        pathList.AddRange(unitySuffixPath);
-        if (unityArrayOffset != -1)
-          pathList.Add(unityArrayOffset);
-      }
       return pathList.ToArray();
     }
 
@@ -255,6 +272,8 @@ namespace LiveSplit.BugFables
       DPMainManagerBattle = null;
       DPMainManagerBattlePtr = null;
       DPMainManagerEnemyEncounter = null;
+      DPMainManagerInEvent = null;
+      DPMainManagerLastEvent = null;
       numFlags = -1;
     }
 

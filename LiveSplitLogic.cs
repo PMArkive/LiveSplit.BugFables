@@ -15,6 +15,8 @@ namespace LiveSplit.BugFables
       SongIsFading
     }
 
+    private const int newGameEventId = 8;
+    
     private EndTimeState currentEndTimeState = EndTimeState.NotArrivedYet;
 
     private GameMemory gameMemory;
@@ -61,12 +63,24 @@ namespace LiveSplit.BugFables
     public bool ShouldStart()
     {
       byte[] flags;
+      bool inEvent = false;
+      int lastEvent = -1;
 
       try
       {
         if (!gameMemory.ReadFlags(out flags))
         {
           LogToFile("ShouldStart: Couldn't read the flags");
+          return false;
+        }
+        if (!gameMemory.ReadInEvent(out inEvent))
+        {
+          LogToFile("ShouldStart: Couldn't read inevent");
+          return false;
+        }
+        if (!gameMemory.ReadLastEvent(out lastEvent))
+        {
+          LogToFile("ShouldStart: Couldn't read lastevent");
           return false;
         }
       }
@@ -82,7 +96,11 @@ namespace LiveSplit.BugFables
         LogToFile("ShouldStart: NewGameStarted was " + oldNewGameStarted + " and now " + newNewGameStarted);
 
       oldNewGameStarted = newNewGameStarted;
-      return shouldStart;
+      
+      // Having the new game started flag being toggled to true isn't enough: we need to make sure the value was
+      // changed as part of being in the new game event because it's possible it was set as part of the save load event.
+      // It also improves the reliability since this check can be destructive if a false positive happen
+      return shouldStart && inEvent && lastEvent == newGameEventId;
     }
 
     public bool ShouldSplit(int currentSplitIndex, int currentRunSplitsCount)
@@ -270,6 +288,7 @@ namespace LiveSplit.BugFables
     {
       oldEnemyEncounter = null;
       currentEndTimeState = EndTimeState.NotArrivedYet;
+      oldNewGameStarted = true;
 
       InitSplits();
       LogToFile("LOGIC RESET");
