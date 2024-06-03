@@ -171,17 +171,8 @@ namespace LiveSplit.BugFables
 
     public bool ReadCurrentRoomId(out int roomId)
     {
-      StringBuilder sb = new StringBuilder();
-      if (DPMainManagerCurrentRoomName.DerefString(BfGameProcess, ReadStringType.ASCII, sb))
-      {
-        string roomName = sb.ToString();
-        if (!int.TryParse(roomName, out roomId))
-        {
-          roomId = -1;
-          return false;
-        }
+      if (DPMainManagerCurrentRoomName.Deref(BfGameProcess, out roomId))
         return true;
-      }
 
       roomId = -1;
       return false;
