@@ -37,7 +37,7 @@ namespace LiveSplit.BugFables
         logic.ResetLogic();
     }
 
-    public void OnReset(object sender, TimerPhase t)
+    private void OnReset(object sender, TimerPhase t)
     {
       if (!blockEvents)
       {

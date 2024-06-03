@@ -45,14 +45,12 @@ namespace LiveSplit.BugFables
     const int offsetMainManagerInstance = 0x10;
     const int offsetMainManagerMap = 0x20;
     const int offsetMainManagerBattle = 0x40;
-
-    // MainManger offsets
+    const int offsetMainManagerMusicCoroutine = 0x58;
     const int offsetMainMangerMusicIdArray = 0x160;
     const int offsetMainManagerLastEvent = 0x3b0;
 
     // MainManger instance offsets
     const int offsetMainManagerFlagsArray = 0x160;
-    const int offsetMainManagerMusicCoroutine = 0x58;
     const int offsetMainManagerEnemyEncounter = 0x190;
     const int offsetMainManagerInEvent = 0x25e;
     
@@ -61,7 +59,6 @@ namespace LiveSplit.BugFables
 
     // Unity specific offsets
     const int offsetUnityCachedPtr = 0x10;
-    readonly List<int> offsetPathUnityGameObjectName = new List<int> { offsetUnityCachedPtr, 0x30, 0x60, 0x0 };
 
     private Process BfGameProcess = null;
 
@@ -196,18 +193,17 @@ namespace LiveSplit.BugFables
       DPMainManagerCurrentRoomName = new(moduleName, baseAddrMainManagerPath,
         GetFullOffsetPathFromParts([offsetMainManagerMap, offsetMapControlMapId]));
 
-      DPMainManagerCurrentRoomName = new DeepPointer(moduleName, baseAddrMainManagerPath,
-        GetFullOffsetPathFromParts(new List<int> { offsetMainManagerMap }, offsetPathUnityGameObjectName));
+      DPMainManagerFlags = new(moduleName, baseAddrMainManagerPath,
+        GetFullOffsetPathFromParts([offsetMainManagerInstance, offsetMainManagerFlagsArray, offsetArrayFirstElement]));
 
-      DPMainManagerFlags = new DeepPointer(moduleName, baseAddrMainManagerPath,
-        GetFullOffsetPathFromParts(new List<int> { offsetMainManagerInstance, offsetMainManagerFlagsArray,
-                                                   offsetArrayFirstElement }));
+      DPMainManagerFirstMusicId = new(moduleName, baseAddrMainManagerPath,
+        GetFullOffsetPathFromParts([offsetMainMangerMusicIdArray, offsetArrayFirstElement]));
 
-      DPMainManagerFirstMusicId = new DeepPointer(moduleName, baseAddrMainManagerPath,
-        GetFullOffsetPathFromParts(new List<int> { offsetMainMangerMusicIdArray, offsetArrayFirstElement }));
+      DPMainManagerBattlePtr = new(moduleName, baseAddrMainManagerPath,
+      GetFullOffsetPathFromParts([offsetMainManagerBattle, offsetUnityCachedPtr]));
 
-      DPMainManagerBattlePtr = new DeepPointer(moduleName, baseAddrMainManagerPath,
-      GetFullOffsetPathFromParts(new List<int> { offsetMainManagerBattle, offsetUnityCachedPtr }));
+      DPMainManagerBattle = new(moduleName, baseAddrMainManagerPath,
+      GetFullOffsetPathFromParts([offsetMainManagerBattle]));
 
       DPMainManagerEnemyEncounter = new(moduleName, baseAddrMainManagerPath,
       GetFullOffsetPathFromParts([offsetMainManagerInstance, offsetMainManagerEnemyEncounter, offsetArrayFirstElement]));
