@@ -19,11 +19,11 @@ namespace LiveSplit.BugFables
     public BugFablesComponent(LiveSplitState state)
     {
       liveSplitState = state;
-      timerModel = new TimerModel();
+      timerModel = new();
       timerModel.CurrentState = liveSplitState;
-      gameMemory = new GameMemory();
-      settingsUserControl = new SettingsUserControl(state);
-      logic = new LiveSplitLogic(gameMemory, settingsUserControl);
+      gameMemory = new();
+      settingsUserControl = new(state);
+      logic = new(gameMemory, settingsUserControl);
 
       liveSplitState.OnReset += OnReset;
       liveSplitState.OnStart += OnStart;

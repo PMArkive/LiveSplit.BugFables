@@ -17,7 +17,7 @@ namespace LiveSplit.BugFables
 
     private EndTimeState currentEndTimeState = EndTimeState.NotArrivedYet;
 
-    private GameMemory gameMemory = new GameMemory();
+    private GameMemory gameMemory;
 
     // Defaults to true so that the ShouldStart logic won't trigger if LiveSplit
     // is opened whtn a file is loaded
@@ -92,10 +92,8 @@ namespace LiveSplit.BugFables
       {
         return ShouldMidSplit(currentSplitIndex);
       }
-      else
-      {
-        return ShouldEnd();
-      }
+
+      return ShouldEnd();
     }
 
     private bool ShouldMidSplit(int currentSplitIndex)
@@ -157,22 +155,19 @@ namespace LiveSplit.BugFables
 
     private bool MidSplitFlagsCheck(Split split, byte[] flags)
     {
-      if (split.requiredFlags != null)
+      if (split.requiredFlags != null && split.requiredFlags.Length != 0)
       {
-        if (split.requiredFlags.Length != 0)
+        bool allFlagsTrue = true;
+        foreach (var requiredFlag in split.requiredFlags)
         {
-          bool allFlagsTrue = true;
-          foreach (var requiredFlag in split.requiredFlags)
+          if (!BitConverter.ToBoolean(flags, (int)requiredFlag))
           {
-            if (!BitConverter.ToBoolean(flags, (int)requiredFlag))
-            {
-              allFlagsTrue = false;
-              break;
-            }
+            allFlagsTrue = false;
+            break;
           }
-
-          return allFlagsTrue;
         }
+
+        return allFlagsTrue;
       }
 
       return true;
@@ -180,27 +175,24 @@ namespace LiveSplit.BugFables
 
     private bool MidSplitEnemyDefeatedCheck(Split split, byte[] enemyEncounter, long battlePtr)
     {
-      if (split.requiredEnemiesDefeated != null)
+      if (split.requiredEnemiesDefeated != null && split.requiredEnemiesDefeated.Length != 0)
       {
-        if (split.requiredEnemiesDefeated.Length != 0)
+        if (battlePtr != 0)
+          return false;
+
+        bool allEnemiesDefeated = true;
+        foreach (var requiredEnemy in split.requiredEnemiesDefeated)
         {
-          if (battlePtr != 0)
-            return false;
-
-          bool allEnemiesDefeated = true;
-          foreach (var requiredEnemy in split.requiredEnemiesDefeated)
+          int newNbrDefeated = gameMemory.GetNbrDefeatedForEnemyId(enemyEncounter, requiredEnemy);
+          int oldNbrDefeated = gameMemory.GetNbrDefeatedForEnemyId(oldEnemyEncounter, requiredEnemy);
+          if (newNbrDefeated <= oldNbrDefeated)
           {
-            int newNbrDefeated = gameMemory.GetNbrDefeatedForEnemyId(enemyEncounter, requiredEnemy);
-            int oldNbrDefeated = gameMemory.GetNbrDefeatedForEnemyId(oldEnemyEncounter, requiredEnemy);
-            if (newNbrDefeated <= oldNbrDefeated)
-            {
-              allEnemiesDefeated = false;
-              break;
-            }
+            allEnemiesDefeated = false;
+            break;
           }
-
-          return allEnemiesDefeated;
         }
+
+        return allEnemiesDefeated;
       }
 
       return true;

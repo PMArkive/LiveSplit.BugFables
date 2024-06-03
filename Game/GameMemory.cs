@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace LiveSplit.BugFables
 {
@@ -72,7 +70,6 @@ namespace LiveSplit.BugFables
     
     public GameMemory()
     {
-      this.pathLogFile = Directory.GetCurrentDirectory() + @"\Components\LiveSplit.BugFables-log.txt";
       ProcessHook();
     }
 
@@ -267,35 +264,16 @@ namespace LiveSplit.BugFables
       {
         if (procModule.ModuleName == moduleNameNewMono)
         {
-          LogToFile("Detected MonoBleedingEdge");
           return BfVersion.v113MonoBleedingEdge;
         }
 
         if (procModule.ModuleName == moduleNameOldMono)
         {
-          LogToFile("Detected Mono");
           return BfVersion.v110;
         }
       }
-      
-      LogToFile("Couldn't find the runtime module, assuming MonoBleedingEdge");
+
       return BfVersion.v113MonoBleedingEdge;
-    }
-    
-    private void LogToFile(string message)
-    {
-      if (!File.Exists(pathLogFile))
-      {
-        var fs = File.Create(pathLogFile);
-        fs.Close();
-      }
-
-      string currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-
-      using (StreamWriter file = new StreamWriter(pathLogFile, append: true))
-      {
-        file.WriteLine("[" + currentTimeStamp + "] " + message);
-      }
     }
   }
 }
