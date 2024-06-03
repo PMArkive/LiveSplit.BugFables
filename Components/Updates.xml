@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <updates>
+  <update version="1.3.1">
+    <files>
+      <file path="Components/LiveSplit.BugFables.dll" status="changed" />
+    </files>
+    <changelog>
+      <change>Improved the reliability of the MainManager class data pointer path</change>
+      <change>Increased the precision and reliability of the start / restart timer check</change>
+      <change>Ignore events sent by LiveSplit when starting / resetting the timer from the component</change>
+      <change>Simplified the map check by checking its map id instead of its GameObject's name</change>
+      <change>Clean up the project and code</change>
+    </changelog>
+  </update>
   <update version="1.3.0">
     <files>
       <file path="Components/LiveSplit.BugFables.dll" status="changed" />
