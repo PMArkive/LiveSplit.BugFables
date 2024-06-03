@@ -16,6 +16,8 @@ namespace LiveSplit.BugFables
     private LiveSplitLogic logic;
     private SettingsUserControl settingsUserControl;
 
+    private bool blockEvents = false;
+
     public BugFablesComponent(LiveSplitState state)
     {
       liveSplitState = state;
@@ -31,12 +33,17 @@ namespace LiveSplit.BugFables
 
     private void OnStart(object sender, EventArgs e)
     {
-      logic.ResetLogic();
+      if (!blockEvents)
+        logic.ResetLogic();
     }
 
     public void OnReset(object sender, TimerPhase t)
     {
-      logic.ResetLogic();
+      if (!blockEvents)
+      {
+        logic.ResetLogic();
+        gameMemory.ResetEverything();
+      }
     }
 
     public override string ComponentName => BugFablesFactory.AutosplitterName;
@@ -76,9 +83,11 @@ namespace LiveSplit.BugFables
 
       if (logic.ShouldStart())
       {
+        blockEvents = true;
         if (liveSplitState.CurrentPhase == TimerPhase.Running)
           timerModel.Reset();
         timerModel.Start();
+        blockEvents = false;
       }
 
       if (liveSplitState.CurrentPhase == TimerPhase.Running)

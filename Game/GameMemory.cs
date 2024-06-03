@@ -249,7 +249,7 @@ namespace LiveSplit.BugFables
       }
     }
 
-    private void ResetEverything()
+    public void ResetEverything()
     {
       BfGameProcess = null;
       moduleName = "";
