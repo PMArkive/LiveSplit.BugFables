@@ -22,14 +22,14 @@ namespace LiveSplit.BugFables
 
     // Version specific information
     private const string moduleNameOldMono = "mono.dll";
-    private const string moduleNameNewMono = "mono-2.0-bdwgc.dll";
+    private const string moduleNameNewMono = "UnityPlayer.dll";
     
     const int baseAddrMainManagerStaticPath110 = 0x00501AC8;
     readonly List<int> offsetPathPrefixMainManagerStatic110 = new List<int> { 0x20, 0x150 };
     private const int numFlags110 = 750;
     
-    const int baseAddrMainManagerStaticPath113MonoBleedingEdge = 0x00493C70;
-    readonly List<int> offsetPathPrefixMainManagerStatic113MonoBleedingEdge = [0x98, 0x10, 0x4A8, 0x18, 0x8, 0x60];
+    const int baseAddrMainManagerStaticPath113MonoBleedingEdge = 0x0150DA78;
+    readonly List<int> offsetPathPrefixMainManagerStatic113MonoBleedingEdge = [0x1D0, 0x1E8, 0x4E0, 0x8C0, 0xE0, 0x20, 0x60];
 
     // Version agnostics essentials
     private int baseAddrMainManagerPath = 0;
