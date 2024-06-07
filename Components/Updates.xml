@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <updates>
+  <update version="1.3.2">
+    <files>
+      <file path="Components/LiveSplit.BugFables.dll" status="changed" />
+    </files>
+    <changelog>
+      <change>Improved the reliability of the MainManager class data pointer path once again</change>
+      <change>Recreate the log file if it was older than 30 days</change>
+      <change>Catch exceptions thrown as a result of not being able to log to prevent other errors</change>
+      <change>Decreased the verbosity of the logs and add more useful logging</change>
+    </changelog>
+  </update>
   <update version="1.3.1">
     <files>
       <file path="Components/LiveSplit.BugFables.dll" status="changed" />
