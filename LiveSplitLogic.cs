@@ -26,6 +26,7 @@ namespace LiveSplit.BugFables
     private bool oldNewGameStarted = true;
     private byte[] oldEnemyEncounter = null;
     private string pathLogFile = "";
+    private bool lastReadWasBad = false;
 
     private Split[] splits;
     private SettingsUserControl settings;
@@ -41,17 +42,30 @@ namespace LiveSplit.BugFables
 
     private void LogToFile(string message)
     {
-      if (!File.Exists(pathLogFile))
+      try
       {
-        var fs = File.Create(pathLogFile);
-        fs.Close();
-      }
+        if (!File.Exists(pathLogFile))
+        {
+          var fs = File.Create(pathLogFile);
+          fs.Close();
+        }
+        else
+        {
+          if (DateTime.UtcNow - File.GetCreationTimeUtc(pathLogFile) > TimeSpan.FromDays(30))
+          {
+            var fs = File.Create(pathLogFile);
+            fs.Close();
+          }
+        }
 
-      string currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        string currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-      using (StreamWriter file = new StreamWriter(pathLogFile, append: true))
-      {
+        using StreamWriter file = new StreamWriter(pathLogFile, append: true);
         file.WriteLine("[" + currentTimeStamp + "] " + message);
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e);
       }
     }
 
@@ -70,25 +84,38 @@ namespace LiveSplit.BugFables
       {
         if (!gameMemory.ReadFlags(out flags))
         {
-          LogToFile("ShouldStart: Couldn't read the flags");
+          if (!lastReadWasBad)
+            LogToFile("ShouldStart: Couldn't read the flags");
+          lastReadWasBad = true;
           return false;
         }
         if (!gameMemory.ReadInEvent(out inEvent))
         {
-          LogToFile("ShouldStart: Couldn't read inevent");
+          if (!lastReadWasBad)
+            LogToFile("ShouldStart: Couldn't read inevent");
+          lastReadWasBad = true;
           return false;
         }
         if (!gameMemory.ReadLastEvent(out lastEvent))
         {
-          LogToFile("ShouldStart: Couldn't read lastevent");
+          if (!lastReadWasBad)
+            LogToFile("ShouldStart: Couldn't read lastevent");
+          lastReadWasBad = true;
           return false;
         }
       }
       catch (Exception ex)
       {
-        LogToFile("ShouldStart: Unhandled exception while reading memory: " + ex.Message);
+        if (!lastReadWasBad) 
+          LogToFile("ShouldStart: Unhandled exception while reading memory: " + ex.Message);
+        lastReadWasBad = true;
         return false;
       }
+      
+      if (lastReadWasBad)
+        LogToFile("ShouldStart: Reestablished memory reads");
+
+      lastReadWasBad = false;
       bool newNewGameStarted = BitConverter.ToBoolean(flags, (int)GameEnums.Flag.NewGameStarted);
       bool shouldStart = (newNewGameStarted && !oldNewGameStarted);
 
@@ -96,11 +123,20 @@ namespace LiveSplit.BugFables
         LogToFile("ShouldStart: NewGameStarted was " + oldNewGameStarted + " and now " + newNewGameStarted);
 
       oldNewGameStarted = newNewGameStarted;
-      
+
       // Having the new game started flag being toggled to true isn't enough: we need to make sure the value was
       // changed as part of being in the new game event because it's possible it was set as part of the save load event.
       // It also improves the reliability since this check can be destructive if a false positive happen
-      return shouldStart && inEvent && lastEvent == newGameEventId;
+      bool willStart = shouldStart && inEvent && lastEvent == newGameEventId;
+
+      if (willStart)
+      {
+        LogToFile("ShouldStart: Decided to start");
+        LogToFile($"ShouldStart: Mode: {settings.Mode}");
+      }
+
+      
+      return willStart;
     }
 
     public bool ShouldSplit(int currentSplitIndex, int currentRunSplitsCount)
@@ -161,6 +197,8 @@ namespace LiveSplit.BugFables
         return false;
 
       enemyEncounter.CopyTo(oldEnemyEncounter, 0);
+      
+      LogToFile($"ShouldMidSplit: Decided to split on {split.name} in {split.group}");
 
       return true;
     }
@@ -226,25 +264,37 @@ namespace LiveSplit.BugFables
       {
         if (!gameMemory.ReadFirstMusicId(out currentSong))
         {
-          LogToFile("ShouldEnd: Couldn't read the first music id");
+          if (!lastReadWasBad) 
+            LogToFile("ShouldEnd: Couldn't read the first music id");
+          lastReadWasBad = true;
           return false;
         }
         if (!gameMemory.ReadMusicCoroutineInProgress(out musicCoroutine))
         {
-          LogToFile("ShouldEnd: Couldn't read the music coroutine");
+          if (!lastReadWasBad) 
+            LogToFile("ShouldEnd: Couldn't read the music coroutine");
+          lastReadWasBad = true;
           return false;
         }
         if (!gameMemory.ReadCurrentRoomId(out currentRoomId))
         {
-          LogToFile("ShouldEnd: Couldn't read the current room id");
+          if (!lastReadWasBad) 
+            LogToFile("ShouldEnd: Couldn't read the current room id");
+          lastReadWasBad = true;
           return false;
         }
       }
       catch (Exception ex)
       {
-        LogToFile("ShouldEnd: Unhandled exception while reading memory: " + ex.Message);
+        if (!lastReadWasBad)
+          LogToFile("ShouldEnd: Unhandled exception while reading memory: " + ex.Message);
+        lastReadWasBad = true;
         return false;
       }
+
+      if (lastReadWasBad)
+        LogToFile("ShouldEnd: Reestablished memory reads");
+      lastReadWasBad = false;
 
       if (currentEndTimeState == EndTimeState.NotArrivedYet)
       {
@@ -276,7 +326,7 @@ namespace LiveSplit.BugFables
         else if (currentEndTimeState == EndTimeState.SongIsFading && !newMusicCouroutineInProgress)
         {
           currentEndTimeState = EndTimeState.NotArrivedYet;
-          LogToFile("ShouldEnd: The level up song is done fading");
+          LogToFile("ShouldEnd: The level up song is done fading, decided to end");
           return true;
         }
       }
