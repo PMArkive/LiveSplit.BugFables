@@ -28,8 +28,8 @@ namespace LiveSplit.BugFables
     readonly List<int> offsetPathPrefixMainManagerStatic110 = new List<int> { 0x20, 0x150 };
     private const int numFlags110 = 750;
     
-    const int baseAddrMainManagerStaticPath113MonoBleedingEdge = 0x0150DA78;
-    readonly List<int> offsetPathPrefixMainManagerStatic113MonoBleedingEdge = [0x1D0, 0x1E8, 0x4E0, 0x8C0, 0xE0, 0x20, 0x60];
+    const int baseAddrMainManagerStaticPath113MonoBleedingEdge = 0x014EC558;
+    readonly List<int> offsetPathPrefixMainManagerStatic113MonoBleedingEdge = [0x58, 0x98, 0x0, 0x60];
 
     // Version agnostics essentials
     private int baseAddrMainManagerPath = 0;
