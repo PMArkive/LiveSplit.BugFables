@@ -48,13 +48,16 @@ namespace LiveSplit.BugFables
         {
           var fs = File.Create(pathLogFile);
           fs.Close();
+          File.SetCreationTimeUtc(pathLogFile, DateTime.UtcNow);
         }
         else
         {
           if (DateTime.UtcNow - File.GetCreationTimeUtc(pathLogFile) > TimeSpan.FromDays(30))
           {
+            File.Delete(pathLogFile);
             var fs = File.Create(pathLogFile);
             fs.Close();
+            File.SetCreationTimeUtc(pathLogFile, DateTime.UtcNow);
           }
         }
 
